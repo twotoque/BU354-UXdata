@@ -716,8 +716,8 @@ def visualize_chi_square(df, column_name, output_filename='chi_square_test.pdf')
     
 def main():
     """Main function to orchestrate the ranking analysis."""
-    googleForm = pd.read_csv('/Users/dereksong/Documents/Newsletter Spring Front/Spring Newsletter Jamaal Myers/img/oGlogos/winternship-website/bu354-platform/ux-research/UXsurvey.csv')
-    totalResearch = pd.read_csv('/Users/dereksong/Documents/Newsletter Spring Front/Spring Newsletter Jamaal Myers/img/oGlogos/winternship-website/bu354-platform/ux-research/UXsurveyStickyNote.csv')
+    googleForm = pd.read_csv('UXsurvey.csv')
+    totalResearch = pd.read_csv('UXsurveyStickyNote.csv')
 
     avgRanking = calculate_average_rankings(googleForm)
     avgRankingtotalResearch = calculate_average_rankings(totalResearch)
@@ -727,32 +727,34 @@ def main():
 
     # render/export
     print("Generating average rankings bar chart...")
-    render_rankings_graph(avgRanking, './ux-research/pdfs/dashboard_rankings.pdf')
+    render_rankings_graph(avgRanking, './pdfs/dashboard_rankings.pdf')
     print("Generating ranking distribution box plot...")
-    render_ranking_distribution(distributions, './ux-research/pdfs/dashboard_distribution.pdf')
+    render_ranking_distribution(distributions, './pdfs/dashboard_distribution.pdf')
 
     print("Generating average rankings bar chart (total)...")
-    render_rankings_graph(avgRankingtotalResearch, './ux-research/pdfs/dashboard_rankings_total.pdf')
+    render_rankings_graph(avgRankingtotalResearch, './pdfs/dashboard_rankings_total.pdf')
     print("Generating ranking distribution box plot (total)...")
-    render_ranking_distribution(distributionstotalResearch, './ux-research/pdfs/dashboard_distribution_total.pdf')
+    render_ranking_distribution(distributionstotalResearch, './pdfs/dashboard_distribution_total.pdf')
 
     print("Generating major impact scatter plot...")
-    render_major_impact_scatter(googleForm, './ux-research/pdfs/dashboard_by_major_scatter.pdf')
+    render_major_impact_scatter(googleForm, './pdfs/dashboard_by_major_scatter.pdf')
     print("Generating major impact grouped box plot...")
-    render_major_impact_grouped(googleForm, './ux-research/pdfs/dashboard_by_major_grouped.pdf')
+    render_major_impact_grouped(googleForm, './pdfs/dashboard_by_major_grouped.pdf')
     print("Generating major distribution bar chart...")
-    render_major_distribution(googleForm, './ux-research/pdfs/major_distribution.pdf')
+    render_major_distribution(googleForm, './pdfs/major_distribution.pdf')
     print("Generating year distribution bar chart...")
-    render_year_distribution(googleForm, './ux-research/pdfs/year_distribution.pdf')
+    render_year_distribution(googleForm, './pdfs/year_distribution.pdf')
     print("\nStatistical Comparison of Front-runners:")
     
-    compare_two_dashboards(googleForm, 'A', 'E', './ux-research/pdfs/comparison_A_vs_E.pdf')
-    compare_two_dashboards(googleForm, 'A', 'D', './ux-research/pdfs/comparison_A_vs_D.pdf')
+    compare_two_dashboards(googleForm, 'A', 'E', './pdfs/comparison_A_vs_E.pdf')
+    compare_two_dashboards(googleForm, 'A', 'D', './pdfs/comparison_A_vs_D.pdf')
 
     chi_square_preference_test(googleForm, 'Which bar style do you prefer?')
-    visualize_chi_square(googleForm, 'Which bar style do you prefer?', './ux-research/pdfs/navigation_preference.pdf')
-
+    visualize_chi_square(googleForm, 'Which bar style do you prefer?', './pdfs/navigation_preference.pdf')
     chi_square_independence_test(googleForm,'Which bar style do you prefer?', 'What best describes your major?')
+
+    chi_square_preference_test(googleForm, 'What colour theme worked best?')
+    visualize_chi_square(googleForm, 'What colour theme worked best?', './pdfs/colour_theme_preference.pdf')
 
     # summaries
     print("Avg Rankings Summary:")
@@ -781,6 +783,7 @@ def main():
             avg = statistics.mean(rankings)
             major_short = major.split(',')[0] if ',' in major else major
             print(f"  {major_short}: {avg:.2f} (n={len(rankings)})")
+
     
 
     print(f"\nPDFs saved:")
@@ -795,6 +798,7 @@ def main():
     print("  - comparison_A_vs_D.pdf")
     print("  - comparison_A_vs_E.pdf")
     print("  - navigation_preference.pdf")
+    print("  - colour_theme_preference.pdf")
 
 
 
