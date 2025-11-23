@@ -133,7 +133,7 @@ def compare_two_dashboards(df, dashboard1='A', dashboard2='E', output_filename='
     mean2 = rankings2.mean()
     mean_diff = mean1 - mean2
     
-    std_diff = (rankings1 - rankings2).std()
+    std_diff = (rankings1 - rankings2).std(ddof=1)
     cohens_d = mean_diff / std_diff if std_diff != 0 else 0
     
     print(f"\nPaired T-Test: Dashboard {dashboard1} vs Dashboard {dashboard2}")
