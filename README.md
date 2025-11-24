@@ -7,5 +7,5 @@ Graphs can be found in the `/pdfs` folder, raw data is found in the `.csv` folde
 # Deliverables 
 The final report is stored in the `/BU354 Comparative Usability Report with High-Fidelity Prototypes and Formulas.pdf` on root, with the formula sheet located at `/formuale.pdf` on root.
 Additionally, there are two Figma prototype links:
-* **High-fidelity: view it [here](https://www.figma.com/proto/iyxzz8QmrJeckuwllBQChe/BU354-Dashboard-Public-Figma?node-id=1-6026&p=f&t=nD5LAKoPBDNLzlIr-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A6026&show-proto-sidebar=1) 
-* **Medium-fidelity:** view it [here](https://www.figma.com/proto/iyxzz8QmrJeckuwllBQChe/BU354-Dashboard-Public-Figma?node-id=1-3383&p=f&t=e2igowekNUdeY7lf-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A3109&starting-point-node-id=1%3A3383&show-proto-sidebar=1) 
+* **High-fidelity prototype**: view it [here](https://www.figma.com/proto/iyxzz8QmrJeckuwllBQChe/BU354-Dashboard-Public-Figma?node-id=1-6026&p=f&t=nD5LAKoPBDNLzlIr-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A6026&show-proto-sidebar=1) 
+* **Medium-fidelity prototype**: view it [here](https://www.figma.com/proto/iyxzz8QmrJeckuwllBQChe/BU354-Dashboard-Public-Figma?node-id=1-3383&p=f&t=e2igowekNUdeY7lf-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A3109&starting-point-node-id=1%3A3383&show-proto-sidebar=1) 
