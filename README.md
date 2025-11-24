@@ -4,4 +4,4 @@ The design process was led by Derek Song, a co-op student working under under th
  
 Graphs can be found in the `/pdfs` folder, raw data is found in the `.csv` folders at root, and Python functions to assist with statistical hypothesis testing and graph generation is done through Python in the `main.py` file. 
 
-The final report is stored in the `
+The final report is stored in the `/BU354 Comparative Usability Report with High-Fidelity Prototypes and Formulas.pdf` on root, with the formula sheet located at `/formuale.pdf` on root.
