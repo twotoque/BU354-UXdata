@@ -14,6 +14,14 @@ RANKING_COLS = [
     'Rank which UI you liked the best [Dashboard F]'
 ]
 
+def export_html(fig, name):
+    fig.write_html(
+        f"./html/{name}.html",
+        include_plotlyjs="cdn",
+        full_html=True
+    )
+
+
 def calculate_average_rankings(df):
     """
     Calculate average rankings for each dashboard from survey data.
@@ -199,7 +207,7 @@ def compare_two_dashboards(df, dashboard1='A', dashboard2='E', output_filename='
     fig.show()
     fig.write_image(output_filename, width=800, height=600)
 
-    return t_stat, p_value, cohens_d
+    return fig, t_stat, p_value, cohens_d
 
 def render_rankings_graph(avg_rankings, output_filename='dashboard_rankings.pdf'):
     """
@@ -727,34 +735,56 @@ def main():
 
     # render/export
     print("Generating average rankings bar chart...")
-    render_rankings_graph(avgRanking, './pdfs/dashboard_rankings.pdf')
+    fig = render_rankings_graph(avgRanking, './pdfs/dashboard_rankings.pdf')
+    export_html(fig, "dashboard_rankings")
+
+
     print("Generating ranking distribution box plot...")
-    render_ranking_distribution(distributions, './pdfs/dashboard_distribution.pdf')
+    fig = render_ranking_distribution(distributions, './pdfs/dashboard_distribution.pdf')
+    export_html(fig, "dashboard_distribution")
 
     print("Generating average rankings bar chart (total)...")
-    render_rankings_graph(avgRankingtotalResearch, './pdfs/dashboard_rankings_total.pdf')
+    fig = render_rankings_graph(avgRankingtotalResearch, './pdfs/dashboard_rankings_total.pdf')
+    export_html(fig, "dashboard_rankings_total")
+
     print("Generating ranking distribution box plot (total)...")
-    render_ranking_distribution(distributionstotalResearch, './pdfs/dashboard_distribution_total.pdf')
+    fig = render_ranking_distribution(distributionstotalResearch, './pdfs/dashboard_distribution_total.pdf')
 
     print("Generating major impact scatter plot...")
-    render_major_impact_scatter(googleForm, './pdfs/dashboard_by_major_scatter.pdf')
+    fig = render_major_impact_scatter(googleForm, './pdfs/dashboard_by_major_scatter.pdf')
+    export_html(fig, "dashboard_by_major_scatter")
+
     print("Generating major impact grouped box plot...")
-    render_major_impact_grouped(googleForm, './pdfs/dashboard_by_major_grouped.pdf')
+    fig = render_major_impact_grouped(googleForm, './pdfs/dashboard_by_major_grouped.pdf')
+    export_html(fig, "dashboard_by_major_grouped")
+    
     print("Generating major distribution bar chart...")
-    render_major_distribution(googleForm, './pdfs/major_distribution.pdf')
+    fig = render_major_distribution(googleForm, './pdfs/major_distribution.pdf')
+    export_html(fig, "major_distribution")
     print("Generating year distribution bar chart...")
-    render_year_distribution(googleForm, './pdfs/year_distribution.pdf')
+    fig = render_year_distribution(googleForm, './pdfs/year_distribution.pdf')
+    export_html(fig, "year_distribution")
     print("\nStatistical Comparison of Front-runners:")
     
-    compare_two_dashboards(googleForm, 'A', 'E', './pdfs/comparison_A_vs_E.pdf')
-    compare_two_dashboards(googleForm, 'A', 'D', './pdfs/comparison_A_vs_D.pdf')
+    fig, t_stat, p_value, d = compare_two_dashboards(googleForm, 'A', 'E', './pdfs/comparison_A_vs_E.pdf')
+    export_html(fig, "comparison_A_vs_E")
+    fig, t_stat, p_value, d = compare_two_dashboards(googleForm, 'A', 'D', './pdfs/comparison_A_vs_D.pdf')
+    export_html(fig, "comparison_A_vs_D")
 
     chi_square_preference_test(googleForm, 'Which bar style do you prefer?')
-    visualize_chi_square(googleForm, 'Which bar style do you prefer?', './pdfs/navigation_preference.pdf')
-    chi_square_independence_test(googleForm,'Which bar style do you prefer?', 'What best describes your major?')
+    
 
-    chi_square_preference_test(googleForm, 'What colour theme worked best?')
-    visualize_chi_square(googleForm, 'What colour theme worked best?', './pdfs/colour_theme_preference.pdf')
+    fig= visualize_chi_square(googleForm, 'Which bar style do you prefer?', './pdfs/navigation_preference.pdf')
+    export_html(fig, "navigation_preference") 
+
+    fig= chi_square_independence_test(googleForm,'Which bar style do you prefer?', 'What best describes your major?')
+   
+
+    fig= chi_square_preference_test(googleForm, 'What colour theme worked best?')
+    
+
+    fig= visualize_chi_square(googleForm, 'What colour theme worked best?', './pdfs/colour_theme_preference.pdf')
+    export_html(fig, "colour_theme_preference") 
 
     # summaries
     print("Avg Rankings Summary:")
