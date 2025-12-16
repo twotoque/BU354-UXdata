@@ -745,6 +745,151 @@ def visualize_chi_square(df, column_name, output_filename='chi_square_test.pdf')
     
     return fig
     
+def render_colour_theme_bar(df, column_name='What colour theme worked best?',
+                             output_filename='colour_theme_bar.pdf'):
+    counts = df[column_name].value_counts().sort_index()
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=counts.index,
+        y=counts.values,
+        marker=dict(color=COLOURS[:len(counts)]),
+        text=counts.values,
+        textposition='outside',
+        hovertemplate='<b>%{x}</b><br>Count: %{y}<extra></extra>'
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text='Colour Theme Preference<br><sub>Raw preference counts</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis_title='Colour Theme',
+        yaxis_title='Number of Respondents',
+        font=dict(size=12),
+        showlegend=False,
+        height=600,
+        width=900,
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+
+    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    fig.update_xaxes(showgrid=False)
+
+    fig.show()
+    fig.write_image(output_filename, width=900, height=600)
+
+    return fig
+
+def render_navigation_bar(df,
+                          column_name='Which bar style do you prefer?',
+                          output_filename='navigation_preference_bar.pdf'):
+    counts = df[column_name].value_counts().sort_index()
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=counts.index,
+        y=counts.values,
+        marker=dict(color=COLOURS[:len(counts)]),
+        text=counts.values,
+        textposition='outside',
+        hovertemplate='<b>%{x}</b><br>Count: %{y}<extra></extra>'
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text='Navigation Preference<br><sub>Raw preference counts</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis_title='Navigation Style',
+        yaxis_title='Number of Respondents',
+        font=dict(size=12),
+        showlegend=False,
+        height=600,
+        width=900,
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+
+    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    fig.update_xaxes(showgrid=False)
+
+    fig.show()
+    fig.write_image(output_filename, width=900, height=600)
+
+    return fig
+
+def render_multiselect_bar(
+    df,
+    column_name,
+    output_filename='multiselect_bar.pdf',
+    angle=-45
+):
+    """
+    Render a bar chart for multi-select (comma-separated) survey responses.
+    
+    Args:
+        df: DataFrame containing survey responses
+        column_name: Column with comma-separated values
+        output_filename: Output PDF filename
+        angle: Rotation angle for x-axis labels
+    """
+    # Split comma-separated responses and explode
+    exploded = (
+        df[column_name]
+        .dropna()
+        .astype(str)
+        .str.split(',')
+        .explode()
+        .str.strip()
+    )
+
+    counts = exploded.value_counts().sort_values(ascending=False)
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=counts.index,
+        y=counts.values,
+        marker=dict(color=COLOURS[:len(counts)]),
+        text=counts.values,
+        textposition='outside',
+        hovertemplate='<b>%{x}</b><br>Count: %{y}<extra></extra>'
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text='Platform Feature Importance<br><sub>Responses may include up to 3 selections</sub>',
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis=dict(
+            title='Feature',
+            tickangle=angle
+        ),
+        yaxis_title='Number of Mentions',
+        font=dict(size=12),
+        showlegend=False,
+        height=650,
+        width=1000,
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+
+    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    fig.update_xaxes(showgrid=False)
+
+    fig.show()
+    fig.write_image(output_filename, width=1000, height=650)
+
+    return fig
+
+
 def main():
     """Main function to orchestrate the ranking analysis."""
     googleForm = pd.read_csv('UXsurvey.csv')
@@ -796,6 +941,14 @@ def main():
 
     chi_square_preference_test(googleForm, 'Which bar style do you prefer?')
     
+    print("Generating navigation preference bar chart...")
+    fig = render_navigation_bar(
+        googleForm,
+        'Which bar style do you prefer?',
+        './pdfs/navigation_preference_bar.pdf'
+    )
+    export_html(fig, "navigation_preference_bar")
+
 
     fig= visualize_chi_square(googleForm, 'Which bar style do you prefer?', './pdfs/navigation_preference.pdf')
     export_html(fig, "navigation_preference") 
@@ -805,9 +958,27 @@ def main():
 
     fig= chi_square_preference_test(googleForm, 'What colour theme worked best?')
     
+    print("Generating colour theme preference bar chart...")
+    fig = render_colour_theme_bar(
+        googleForm,
+        'What colour theme worked best?',
+        './pdfs/colour_theme_bar.pdf'
+    )
+    export_html(fig, "colour_theme_bar")
+
 
     fig= visualize_chi_square(googleForm, 'What colour theme worked best?', './pdfs/colour_theme_preference.pdf')
     export_html(fig, "colour_theme_preference") 
+
+    print("Generating platform importance feature bar chart...")
+    fig = render_multiselect_bar(
+        googleForm,
+        'What is most important to you when completing weekly assignments or managing group work on a platform? (select up to 3)',
+        './pdfs/platform_importance_bar.pdf'
+    )
+    export_html(fig, "platform_importance_bar")
+
+
 
     # summaries
     print("Avg Rankings Summary:")
@@ -852,6 +1023,7 @@ def main():
     print("  - comparison_A_vs_E.pdf")
     print("  - navigation_preference.pdf")
     print("  - colour_theme_preference.pdf")
+    print("  - platform_importance_bar.pdf")
 
 
 
