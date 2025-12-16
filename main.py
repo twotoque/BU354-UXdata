@@ -15,11 +15,34 @@ RANKING_COLS = [
 ]
 
 def export_html(fig, name):
-    fig.write_html(
-        f"./html/{name}.html",
-        include_plotlyjs="cdn",
-        full_html=True
-    )
+    html_string = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <style>
+            body {{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px;
+                box-sizing: border-box;
+            }}
+            .plotly-graph-div {{
+                margin: 0 auto;
+            }}
+        </style>
+    </head>
+    <body>
+        {fig.to_html(include_plotlyjs=False, div_id='plotly-div')}
+    </body>
+    </html>
+    """
+    
+    with open(f"./html/{name}.html", 'w') as f:
+        f.write(html_string)
 
 
 def calculate_average_rankings(df):
